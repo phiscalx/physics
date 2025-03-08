@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一维摩擦力模拟</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 36px;
+      color: #333;
+    }
+    .controls {
+      margin: 20px auto;
+    }
+    .control {
+      display: inline-block;
+      margin: 10px;
+    }
+    .control label {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    .control input {
+      width: 120px;
+      font-size: 20px;
+      text-align: center;
+    }
+    .control button {
+      font-size: 20px;
+      width: 50px;
+      height: 50px;
+    }
+    #canvas, #graphCanvas {
+      display: block;
+      margin: 20px auto;
+      border: 1px solid #000;
+      background-color: #fff;
+    }
+    #canvas {
+      width: 800px;
+      height: 200px;
+    }
+    #graphCanvas {
+      width: 800px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>一维摩擦力模拟</h1>
+  <div class="controls">
+    <div class="control">
+      <label>拉力 (N): </label>
+      <button id="force-decrease">-</button>
+      <input type="number" id="forceInput" step="0.1" value="0">
+      <button id="force-increase">+</button>
+    </div>
+    <div class="control">
+      <label>摩擦系数: </label>
+      <button id="friction-decrease">-</button>
+      <input type="number" id="frictionInput" step="0.1" value="0.2">
+      <button id="friction-increase">+</button>
+    </div>
+  </div>
+  <!-- 模拟展示 -->
+  <canvas id="canvas"></canvas>
+  <!-- 图表展示 -->
+  <canvas id="graphCanvas"></canvas>
+  
+  <script>
+    // 设置模拟canvas
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    // 设置图表canvas
+    const graphCanvas = document.getElementById('graphCanvas');
+    const gctx = graphCanvas.getContext('2d');
+
+    // 高清canvas设置
+    function setupCanvas(canvas, ctx) {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    setupCanvas(canvas, ctx);
+    setupCanvas(graphCanvas, gctx);
+
+    // 地面高度（像素）
+    const groundHeight = 20;
+    // 时间步长（秒），约60FPS
+    const dt = 0.016;
+    
+    // 模拟数据：木块状态
+    const block = {
+      x: 100,           
+      y: canvas.clientHeight - groundHeight - 30,  // 木块高度30
+      width: 50,
+      height: 30,
+      color: 'brown',
+      velocity: 0,      // m/s
+      mass: 1,          // kg
+      frictionCoefficient: 0.2,
+      normalForce: 9.8, // N
+      appliedForce: 0,  // N
+      frictionForce: 0, // N
+      acceleration: 0   // m/s²
+    };
+
+    // 控制按钮事件
+    function updateControl(id, delta) {
+      const input = document.getElementById(id);
+      let currentVal = parseFloat(input.value) || 0;
+      currentVal += delta;
+      input.value = currentVal.toFixed(2);
+    }
+    document.getElementById('force-decrease').addEventListener('click', function() {
+      updateControl('forceInput', -0.1);
+    });
+    document.getElementById('force-increase').addEventListener('click', function() {
+      updateControl('forceInput', 0.1);
+    });
+    document.getElementById('friction-decrease').addEventListener('click', function() {
+      updateControl('frictionInput', -0.1);
+    });
+    document.getElementById('friction-increase').addEventListener('click', function() {
+      updateControl('frictionInput', 0.1);
+    });
+
+    // 用于图表的时间窗口（秒）
+    const timeWindow = 10;
+    // 用于记录时间及数据
+    let simTime = 0;
+    const timeData = [];
+    const speedData = [];
+    const frictionData = [];
+    const forceData = [];
+
+    // 更新物理状态
+    function updatePhysics() {
+      // 从输入框中读取值
+      block.appliedForce = parseFloat(document.getElementById('forceInput').value) || 0;
+      block.frictionCoefficient = parseFloat(document.getElementById('frictionInput').value) || 0;
+      const staticFriction = block.frictionCoefficient * block.normalForce;
+      
+      if (block.velocity === 0 && Math.abs(block.appliedForce) < staticFriction) {
+        block.acceleration = 0;
+        block.frictionForce = block.appliedForce;
+      } else {
+        block.frictionForce = block.frictionCoefficient * block.normalForce;
+        block.frictionForce = block.velocity > 0 ? block.frictionForce : -block.frictionForce;
+        const netForce = block.appliedForce - block.frictionForce;
+        block.acceleration = netForce / block.mass;
+      }
+      
+      block.velocity += block.acceleration * dt;
+      if (Math.abs(block.velocity) < 0.001) block.velocity = 0;
+      block.x += block.velocity * dt * 100;
+      if (block.x < 0) { block.x = 0; block.velocity = 0; }
+      if (block.x + block.width > canvas.clientWidth) { block.x = canvas.clientWidth - block.width; block.velocity = 0; }
+    }
+
+    // 绘制模拟画面
+    function draw() {
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+      drawGround();
+      ctx.fillStyle = block.color;
+      ctx.fillRect(block.x, block.y, block.width, block.height);
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "black";
+      const info = `速度: ${block.velocity.toFixed(2)} m/s, 拉力: ${block.appliedForce.toFixed(2)} N, 摩擦力: ${block.frictionForce.toFixed(2)} N, 质量: ${block.mass.toFixed(2)} kg`;
+      ctx.fillText(info, 10, 20);
+    }
+    function drawGround() {
+      ctx.fillStyle = "#a0522d";
+      ctx.fillRect(0, canvas.clientHeight - groundHeight, canvas.clientWidth, groundHeight);
+    }
+
+    // 绘制图表：调整 y 轴范围为 [-5,5]
+    const graphWidth = graphCanvas.clientWidth;
+    const graphHeight = graphCanvas.clientHeight;
+    const yMin = -5, yMax = 5;
+    function drawGraph() {
+      gctx.clearRect(0, 0, graphCanvas.clientWidth, graphCanvas.clientHeight);
+      // 绘制坐标轴
+      gctx.strokeStyle = "#aaa";
+      gctx.lineWidth = 1;
+      // x轴
+      gctx.beginPath();
+      const zeroY = graphHeight - ((0 - yMin) / (yMax - yMin)) * graphHeight;
+      gctx.moveTo(0, zeroY);
+      gctx.lineTo(graphWidth, zeroY);
+      gctx.stroke();
+      // y轴
+      gctx.beginPath();
+      gctx.moveTo(0, 0);
+      gctx.lineTo(0, graphHeight);
+      gctx.stroke();
+      
+      // 绘制数据曲线
+      const startTime = simTime - timeWindow;
+      function plotData(dataArray, color) {
+        gctx.strokeStyle = color;
+        gctx.lineWidth = 2;
+        gctx.beginPath();
+        let firstPoint = true;
+        for (let i = 0; i < timeData.length; i++) {
+          if (timeData[i] < startTime) continue;
+          const x = ((timeData[i] - startTime) / timeWindow) * graphWidth;
+          const y = graphHeight - ((dataArray[i] - yMin) / (yMax - yMin)) * graphHeight;
+          if (firstPoint) {
+            gctx.moveTo(x, y);
+            firstPoint = false;
+          } else {
+            gctx.lineTo(x, y);
+          }
+        }
+        gctx.stroke();
+      }
+      
+      plotData(speedData, "blue");     // 速度蓝色
+      plotData(forceData, "green");      // 拉力绿色
+      plotData(frictionData, "red");     // 摩擦力红色
+    }
+
+    // 主动画循环
+    function animate() {
+      updatePhysics();
+      draw();
+      
+      simTime += dt;
+      timeData.push(simTime);
+      speedData.push(block.velocity);
+      frictionData.push(block.frictionForce);
+      forceData.push(block.appliedForce);
+      // 保持数据仅记录最近timeWindow秒
+      while (timeData.length && timeData[0] < simTime - timeWindow) {
+        timeData.shift();
+        speedData.shift();
+        frictionData.shift();
+        forceData.shift();
+      }
+      
+      drawGraph();
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
