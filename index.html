@@ -3,161 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>初中物理讲义</title>
+    <title>物理教学网页</title>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
-        h1, h2 { color: #0077cc; }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
-        .example, .exercise { background-color: #f9f9f9; padding: 10px; border-left: 5px solid #3498db; }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        }/*浮力*/
-
-        .copyright-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            margin: auto;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
         }
-        /* 版权 */
-        ul {
-            padding-left: 20px;
+        h1 {
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .link-button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px;
+            font-size: 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+        .link-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>初中物理讲义</h1>
-
-    
-
-    <div class="section">
-        <h2>力</h2>
-        <p>力是物体对物体的作用，力的作用效果有使物体发生形变和改变物体的运动状态。</p>
-        <h3>1. 力的三要素</h3>
-        <p>力的大小、方向和作用点是描述一个力的三个重要因素。</p>
-        <div class="example">
-            <strong>例子：</strong> 用手推门，力的大小决定门开得快慢，力的方向决定门的开合方向。
-        </div>
-    </div>
-    
-    <div class="section">
-        <h2>牛顿运动定律</h2>
-        <p>牛顿第一定律：物体在不受外力作用时，将保持静止或匀速直线运动状态。</p>
-        <p>牛顿第二定律：物体的加速度与所受外力成正比，与质量成反比，公式为：F = ma。</p>
-        <p>牛顿第三定律：作用力与反作用力大小相等，方向相反，作用在不同物体上。</p>
-        <div class="example">
-            <strong>例子：</strong> 用力踢球，球会加速运动，这是牛顿第二定律的体现。
-        </div>
-    </div>
-    
-    <div class="section">
-        <h2>摩擦力</h2>
-        <p>摩擦力是指两个物体接触面之间阻碍相对运动的力。根据物体间的相对运动状态，摩擦力可分为静摩擦力和滑动摩擦力。静摩擦力作用于相对静止的物体之间，阻止其相对滑动；滑动摩擦力则作用于相对运动的物体之间，阻碍其相对运动。
-
-            摩擦力的大小与接触面的性质、粗糙度和可能存在的润滑剂有关。滑动面越粗糙，摩擦系数越大。摩擦系数通常用希腊字母μ表示。物体间的摩擦系数分为两种：滑动摩擦系数和最大静摩擦系数，数值上，后者略大于前者。此外，当两物体间的相对速度较大时，滑动摩擦系数还会与相对速度有关。
-            
-            摩擦力的计算公式为：
-           
-           F = μ_k × N
-            <br>
-            其中，F为摩擦力，μ_k为滑动摩擦系数，N为法向支持力。
-            
-            摩擦力的存在是由于物体接触面之间的附着力，但摩擦力的大小与接触面积大小几乎无关。摩擦力的方向总是与物体相对运动的方向相反。</p>
-            <div class="example">
-                <a href="https://phiscalx.github.io/physics/mocali.html" target="_blank">摩擦力动画演示</a>
-            </div>
-            
-    </div>
-
+    <h1>欢迎来到物理教学网页</h1>
+    <p>请选择你的学习阶段：</p>
     <div class="container">
-        <h1>浮力知识</h1>
-        <p><strong>浮力（Buoyancy）</strong> 是流体对浸入其中的物体施加的向上的力。</p>
-        <h2>阿基米德原理</h2>
-        <p>物体在流体中受到的浮力等于它排开流体的重力：</p>
-        <p><strong>F = ρ × V × g</strong></p>
-        <ul>
-            <li>F：浮力 (N)</li>
-            <li>ρ：流体密度 (kg/m³)</li>
-            <li>V：排开的流体体积 (m³)</li>
-            <li>g：重力加速度 (9.81 m/s²)</li>
-        </ul>
+        <a href="junior.html" class="link-button">初中物理</a>
+        <a href="senior.html" class="link-button">高中物理</a>
     </div>
-
-    <div class="section">
-        <h2>能量和功</h2>
-        <p> 能量和功
-            动能：运动物体所具有的能量，取决于物体的质量和速度。
-            势能：物体由于所处位置或状态（例如高度）而具有的能量。重力势能常用公式 E_p = mgh（质量×重力加速度×高度）表示。
-            功：力使物体沿力的方向移动时所做的工作。功的大小等于力与物体位移的乘积。</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <h2>1. 声音的产生与传播</h2>
-        <p><strong>（1）声音的产生：</strong> 声音由物体振动产生，振动停止，声音也就消失。</p>
-        <p><strong>（2）声音的传播条件：</strong></p>
-        <ul>
-            <li>声音需要通过介质传播，如空气、水、固体等。</li>
-            <li>声音在真空中无法传播。</li>
-        </ul>
-        <p><strong>（3）声音的传播速度：</strong></p>
-        <ul>
-            <li>空气中：约340 m/s（温度 15℃ 时）</li>
-            <li>水中：约1500 m/s</li>
-            <li>钢铁中：约5000 m/s</li>
-        </ul>
-
-        <h2>2. 声音的特性</h2>
-        <p>声音的特性包括<strong>音调、响度和音色</strong>。</p>
-        <p><strong>（1）音调：</strong> 由振动频率决定，频率越高，音调越高。</p>
-        <p><strong>（2）响度：</strong> 由振幅决定，振幅越大，响度越大。</p>
-        <p><strong>（3）音色：</strong> 由发声体的材料、结构等决定，是区分不同声音的主要特征。</p>
-        
-        <h2>3. 声音的反射与折射</h2>
-        <p><strong>（1）回声：</strong> 声音遇到障碍物后被反射回来，并被人耳听到。</p>
-        <p><strong>（2）回声的应用：</strong> 如超声波测距、雷达探测、声呐系统等。</p>
-        
-        <h2>4. 声音的利用与防护</h2>
-        <p><strong>（1）超声波的应用：</strong></p>
-        <ul>
-            <li>医学：B超检查</li>
-            <li>工业：超声波探伤、清洗</li>
-            <li>军事：潜艇声呐</li>
-        </ul>
-        <p><strong>（2）噪声污染及防治：</strong></p>
-        <ul>
-            <li>减少噪声源，如改进机械设备。</li>
-            <li>传播过程中减弱噪声，如安装隔音材料。</li>
-            <li>个人防护，如戴耳塞。</li>
-        </ul>
-    </div>
-    <div class="section">
-        <h2>练习题</h2>
-        <div class="exercise">
-            <p>1. 下列选项中，哪个不是力的三要素？</p>
-            <ul>
-                <li>A. 大小</li>
-                <li>B. 方向</li>
-                <li>C. 速度</li>
-                <li>D. 作用点</li>
-            </ul>
-        </div>
-        <div class="exercise">
-            <p>2. 质量为5kg的物体受到10N的力作用，求其加速度。（g=9.8m/s²）</p>
-        </div>
-    </div>
-
-    <div class="copyright-container">
-        <h2>文件版权声明</h2>
-        <p>作者：李国滔</p>
-        <p>版权所有 &copy; 2025，保留所有权利。</p>
-        <p>未经授权，禁止商业用途。</p>
-    </div>
-    
 </body>
 </html>
